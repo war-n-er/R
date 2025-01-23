@@ -1,0 +1,15 @@
+# Comprehensive Exploratory Data Analysis (EDA)
+library(ggplot2)
+library(corrplot)
+
+# Plot the distribution of incidents by state
+ggplot(data_clean, aes(x = reorder(state, -total_incidents), y = total_incidents)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +
+  theme_minimal() +
+  labs(title = "Total Incidents by State", x = "State", y = "Total Incidents")
+# nnw
+# Correlation matrix of numeric variables
+numeric_vars <- data_clean %>% select_if(is.numeric)
+corr_matrix <- cor(numeric_vars, use = "complete.obs")
+corrplot(corr_matrix, method = "circle", type = "upper", tl.col = "black")

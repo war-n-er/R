@@ -1,0 +1,12 @@
+# nnw Automating Reports with R Markdown
+library(rmarkdown)
+
+# Render a detailed report
+rmarkdown::render(
+  "analysis_report.Rmd",
+  params = list(
+    dataset = data_clean,
+    model_summary = summary(rf_model),
+    treatment_effect = summary(treatment_effect)
+  )
+)

@@ -1,0 +1,20 @@
+# nnw building and Evaluating Machine Learning Models
+library(caret)
+library(randomForest)
+
+# Split data into training and testing sets
+set.seed(123)
+trainIndex <- createDataPartition(data_clean$total_incidents, p = 0.8, list = FALSE)
+train <- data_clean[trainIndex, ]
+test <- data_clean[-trainIndex, ]
+
+# Train a random forest model
+rf_model <- randomForest(total_incidents ~ ., data = train, ntree = 200, mtry = 3, importance = TRUE)
+
+# Evaluate model performance
+predictions <- predict(rf_model, test)
+r_squared <- cor(predictions, test$total_incidents)^2
+cat("R-squared: ", r_squared, "\n")
+
+# Variable importance plot
+varImpPlot(rf_model)

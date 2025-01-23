@@ -1,14 +1,13 @@
-# Data Cleaning and Preprocessing
-library(dplyr)
-library(tidyr)
-
-# Load dataset
-data <- read.csv("crime_data.csv")
-
 # Clean and preprocess data
 data_clean <- data %>%
   filter(!is.na(incident_date)) %>% # Remove rows with missing incident dates
-  mutate(incident_date = as.Date(incident_date, format = "%Y-%m-%d")) %>%
-  separate(location, into = c("city", "state"), sep = ", ")
-# nnw
+  mutate(
+    incident_date = as.Date(incident_date, format = "%Y-%m-%d"),
+    year = as.integer(format(incident_date, "%Y")),
+    month = as.integer(format(incident_date, "%m"))
+  ) %>%
+  separate(location, into = c("city", "state"), sep = ", ") %>%
+  group_by(state, year) %>%
+  summarize(total_incidents = n(), .groups = "drop")
+
 head(data_clean)

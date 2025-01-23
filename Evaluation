@@ -1,0 +1,14 @@
+# nnw - Program Evaluation and Causal Inference
+library(MatchIt)
+
+# Simulate a treatment and control group
+data_clean <- data_clean %>%
+  mutate(treatment = ifelse(state %in% c("IL", "NY"), 1, 0))
+
+# Perform propensity score matching
+match_model <- matchit(treatment ~ total_incidents + year + weekend, data = data_clean, method = "nearest")
+matched_data <- match.data(match_model)
+
+# Estimate treatment effects
+treatment_effect <- lm(total_incidents ~ treatment, data = matched_data)
+summary(treatment_effect)
